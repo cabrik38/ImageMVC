@@ -57,7 +57,6 @@
 				$(elem).prop("disabled", true);
 			}
 			console.log(elem);
-			window.location.href = "index.php?controller=photo&action=likeAction&imgId=<?= $data["imgId"] ?>";
 	}
 
 	</script>

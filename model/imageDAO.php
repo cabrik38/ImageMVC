@@ -35,7 +35,6 @@ class ImageDAO {
 		# Verifie que cet identifiant est correct
 
 		if(!($imgId >= 1 and $imgId <= $this->size())) {
-			debug_print_backtrace();
 			die("<H1>Erreur dans ImageDAO.getImage: imgId=$imgId incorrect</H1>");
 		}
 
@@ -50,7 +49,7 @@ class ImageDAO {
 			print $err[2]."<br/>";
 		}
 
-		return new Image(URL_PATH."/".$img["path"], $imgId, $img["category"], $img["comment"]);
+		return new Image(URL_PATH."/".$img["path"], $imgId, $img["category"], $img["comment"], $img["notes"]);
 	}
 
 	/**
@@ -174,7 +173,7 @@ class ImageDAO {
 			if ($id < 1){
 				$id = 1;
 			}else if ($id >= $this->size()){
-				$id = $this->size();
+			  $id = $this->size();
 			}
 		}
 

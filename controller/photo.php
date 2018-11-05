@@ -274,7 +274,7 @@ class Photo {
 						$imgPath = URL_PATH."/upload/".$imgName.".".$extension_upload;
 						$resultat = move_uploaded_file($_FILES['image']['tmp_name'], $projectRootPath.$imgPath);
 						if ($resultat){
-							// si réussit
+							// si réussi
 
 							// récupération du nouveau id
 							$id = $this->imgDAO->size() + 1;

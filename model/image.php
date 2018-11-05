@@ -1,23 +1,26 @@
 <?php
-  
+
 class Image {
 
-	private $url = ""; 
+	private $url = "";
 	private $id = 0;
 	private $category = "";
 	private $comment = "";
+  private $notes = 0;
 
 	/**
 	 * @param string $u Url de l'image
 	 * @param int $id Id de l'image
 	 * @param string $cat Categorie de l'image
 	 * @param string $com Commentaire de l'image
+   * @param int $notes notes de l'image
 	 */
-	public function __construct(string $u, int $id, string $cat, string $com) {
+	public function __construct(string $u, int $id, string $cat, string $com, int $notes) {
 		$this->url = $u;
 		$this->id = $id;
 		$this->category = $cat;
 		$this->comment = $com;
+    $this->notes = $notes;
 	}
 
 	/**
@@ -47,7 +50,11 @@ class Image {
 	public function getComment() : string {
 		return $this->comment;
 	}
-	
+
+  public function getNotes() : int {
+    return $this->notes;
+  }
+
 	function setCategory($category) {
 		$this->category = $category;
 	}
@@ -55,4 +62,8 @@ class Image {
 	function setComment($comment) {
 		$this->comment = $comment;
 	}
+
+  function setNotes($notes) {
+    $this->notes = $notes;
+  }
 }
