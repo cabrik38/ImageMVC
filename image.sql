@@ -1,23 +1,17 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.3
+-- version 4.7.2
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le :  Dim 12 nov. 2017 à 17:57
+-- Généré le :  lun. 05 nov. 2018 à 12:54
 -- Version du serveur :  5.6.35
--- Version de PHP :  7.1.8
+-- Version de PHP :  7.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
--- Base de données :  `image`
+-- Base de données :  `Image`
 --
 
 -- --------------------------------------------------------
@@ -28,17 +22,17 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `image` (
   `id` int(11) NOT NULL,
-  `path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `comment` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `path` varchar(1024) DEFAULT NULL,
+  `category` varchar(64) DEFAULT NULL,
+  `comment` varchar(1024) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `image`
 --
 
 INSERT INTO `image` (`id`, `path`, `category`, `comment`) VALUES
-(1, 'jons/external/45325main_69_rs4.jpg', 'NASA', 'Aldrin\'s bootprint'),
+(1, 'jons/external/45325main_69_rs4.jpg', 'NASA', 'Buzz Aldrin\'s bootprint'),
 (2, 'jons/external/49566main_83_rs4.jpg', 'NASA', 'Mars'),
 (3, 'jons/external/51678main_isabel_new_high.jpg', 'NASA', 'Hurricane Isabel'),
 (4, 'jons/external/53139main_jwhires.jpg', 'NASA', 'Pinwheel Galaxy'),
@@ -1578,19 +1572,7 @@ INSERT INTO `image` (`id`, `path`, `category`, `comment`) VALUES
 (1536, 'jons/pictures5/yosemite_55_bg_090504.jpg', 'Yosemite', 'Squirrels'),
 (1537, 'jons/pictures5/yosemite_57_bg_090504.jpg', 'Yosemite', 'Baby Trout'),
 (1538, 'jons/pictures5/yosemite_58_bg_090504.jpg', 'Yosemite', 'Cathedral Peak'),
-(1539, 'jons/pictures5/zoo_03_bg_120306.jpg', 'San Diego Zoo', 'Large Lizard'),
-(1540, 'upload/f91b2651d6884b0200172a31c1029da2.jpg', 'NASA', 'NASA');
-
--- --------------------------------------------------------
-
---
--- Structure de la table `ImgLike`
---
-
-CREATE TABLE `ImgLike` (
-  `idPhoto` int(11) NOT NULL,
-  `nbLike` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+(1539, 'jons/pictures5/zoo_03_bg_120306.jpg', 'San Diego Zoo', 'Large Lizard');
 
 --
 -- Index pour les tables déchargées
@@ -1601,13 +1583,3 @@ CREATE TABLE `ImgLike` (
 --
 ALTER TABLE `image`
   ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `ImgLike`
---
-ALTER TABLE `ImgLike`
-  ADD PRIMARY KEY (`idPhoto`);
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
