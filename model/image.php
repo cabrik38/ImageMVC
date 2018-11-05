@@ -13,7 +13,7 @@ class Image {
 	 * @param int $id Id de l'image
 	 * @param string $cat Categorie de l'image
 	 * @param string $com Commentaire de l'image
-   * @param int $notes notes de l'image
+   * @param int $notes Notes de l'image
 	 */
 	public function __construct(string $u, int $id, string $cat, string $com, int $notes) {
 		$this->url = $u;

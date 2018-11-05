@@ -248,6 +248,12 @@ class ImageDAO {
 
 		return $s->fetchAll(PDO::FETCH_COLUMN);
 	}
+
+	public function saveLike(Image $img){
+		$imgId = $img->getId();
+		$s = $this->db->prepare('UPDATE image SET notes = :notes WHERE id = :id');
+		$s->execute(array("notes" => $img->getNotes(), "id" => $imgId));
+	}
 }
 
 # Test unitaire

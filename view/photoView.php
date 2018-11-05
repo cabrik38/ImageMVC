@@ -3,7 +3,8 @@
 	<div class="panel-heading">
 		<a class="btn btn-default" href="index.php?controller=photo&action=prevAction&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"]) ?>"><i class="fa fa-arrow-left" aria-hidden="true"></i> Prev</a>
 		<a class="btn btn-default" href="index.php?controller=photo&action=nextAction&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"]) ?>">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-		<a class="btn btn-default center like" id="<?php echo $data["imgId"]; ?>" onclick="likeImg(this, <?php echo $data["imgId"]; ?>)" style="cursor: pointer;"><i class="fa fa-heart" aria-hidden="true"></i></a>
+		<a class="btn btn-default center like" id="<?php echo $data["imgId"]; ?>" href="index.php?controller=photo&action=likeAction&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"])?>&like=like"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+		<a class="btn btn-default center like" id="<?php echo $data["imgId"]; ?>" href="index.php?controller=photo&action=likeAction&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"])?>&like=dislike"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
 		<span id="categories" class="dropdown pull-right">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				Categorie : <span class=""><?= $data["selectedCategory"] ?: "Toutes" ?></span>
@@ -29,36 +30,4 @@
 		</a>
 		<p>Comment : <?= $data["imgComment"] ?></p>
 	</div>
-
-	<script type="text/javascript">
-	$(function() {
-		console.log($('.like').prop('id'));
-		var id = $('.like').prop('id');
-		if ($.cookie(id) != undefined) {
-			if ($.cookie(id) == id) {
-				//déja like
-				$('.like').prop("disabled", true);
-			} else {
-				//pas déja like
-			}
-		} else {
-			//pas de cookie
-		}
-	});
-
-	function likeImg(elem, id) {
-			console.log(elem);
-			if ($.cookie(id) != undefined) {
-				$.cookie(id, id, { expires: 365});
-			} else {
-				$.cookie(id, id, {expires: 365});
-			}
-			if ($.cookie(id) == id) {
-				$(elem).prop("disabled", true);
-			}
-			console.log(elem);
-	}
-
-	</script>
-
 </div>
