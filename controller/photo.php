@@ -30,10 +30,11 @@ class Photo {
         }
         $data["imgSize"] = $imgSize;
 
-        $data["imgUrl"] = $img->getURL();
-        $data["imgId"] = $img->getId();
-        $data["imgComment"] = $img->getComment();
-        $data["imgCategory"] = $img->getCategory();
+		$data["imgUrl"] = $img->getURL();
+		$data["imgId"] = $img->getId();
+		$data["imgComment"] = $img->getComment();
+		$data["imgCategory"] = $img->getCategory();
+		$data["imgNotes"]=$img->getNotes();
 
         // catégorie
         $category = $this->getCategoryQuery();
@@ -354,4 +355,25 @@ class Photo {
         }
     }
 
+
+	/**
+	* Permet d'enregistrer un j'aime
+	*/
+	public function likeAction(){
+		if (isset($_GET["imgId"]) && is_numeric($_GET["imgId"])) {
+			$img = $this->imgDAO->getImage($_GET["imgId"]);
+			$notes = $img->getNotes();
+			if(isset($_GET["like"]) ){
+				if($_GET["like"] == "like"){
+					$img ->setNotes($notes + 1);
+				} else {
+					$img-> setNotes($notes - 1);
+				}
+			}
+			$this->imgDAO->saveLike($img);
+			$data = $this->getData($img);
+			$data["view"] = "photoView.php";
+			require_once("view/mainView.php");
+		}
+	}
 }

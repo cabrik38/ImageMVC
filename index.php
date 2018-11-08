@@ -1,9 +1,8 @@
 <?php
-
 // include config
 require_once ("./config.php");
 
-# Controleur frontal (front controler) 
+# Controleur frontal (front controler)
 
 # En fonction du controleur et de l'action en parametre lance le bon traitement
 # Recherche le nom du controleur
@@ -53,7 +52,7 @@ if ($isValidController){
 		} else {
 			# Erreur dans le code, la classe de l'action n'est pas trouvé
 			die("<b>### Erreur : la methode '$action' du controleur '$controllerClassName' du fichier '$controllerFile' n'existe pas</b>
-				</br>Conseil : verifiez l'orthographe du nom de cette methode dans le fichier $controllerFile.");        
+				</br>Conseil : verifiez l'orthographe du nom de cette methode dans le fichier $controllerFile.");
 		}
 	} else {
 		# Erreur dans le code, la classe de l'action n'est pas trouvé

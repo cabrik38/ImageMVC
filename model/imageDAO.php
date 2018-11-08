@@ -199,21 +199,21 @@ class ImageDAO {
         $id = $img->getId();
         $res = [];
 
-        if ($category != null) {
-            $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND id >= :id');
-            $s->execute(array("category" => $category, "id" => $id));
-            $ids = $s->fetchAll(PDO::FETCH_COLUMN);
+		if ($category != null){
+			$s = $this->db->prepare('SELECT * FROM image WHERE category = :category AND id >= :id');
+			$s->execute(array("category" => $category, "id" => $id));
+			$allImage[] = $s->fetchAll(PDO::FETCH_COLUMN);
 
-            for ($i = 0; $i < $nb && $i < count($ids); $i++) {
-                $res[] = $this->getImage($ids[$i]);
-            }
-        } else {
-            $max = $id + $nb;
-            while ($id < $this->size() && $id < $max) {
-                $res[] = $this->getImage($id);
-                $id++;
-            }
-        }
+			for ($i = 0 ; $i < $nb && $i < count($allImage) ; $i++) {
+				$res[] = $allImage[$i];
+			}
+		}else{
+			$max = $id + $nb;
+			while ($id < $this->size() && $id < $max) {
+				$res[] = $this->getImage($id);
+				$id++;
+			}
+		}
 
         return $res;
     }
