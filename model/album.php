@@ -5,6 +5,7 @@ class Album {
     private $id;
     private $name;
     private $description;
+    private $imgIds = [];
 
     /**
      * @param int $id Id de l'album
@@ -36,6 +37,15 @@ class Album {
      */
     public function getDescription(): string {
         return $this->description;
+    }
+    
+    /**
+     * @return array id des images de l'album
+     */
+    public function getImgIds(): string {
+        $imageAlbumDao = new ImageAlbumDAO();
+        $this->imgIds = $imageAlbumDao->imagesFromAlbum($this->id);
+        return $this->imgIds;
     }
     
     function setId($id) {

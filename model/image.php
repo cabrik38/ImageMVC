@@ -1,5 +1,7 @@
 <?php
 
+require_once 'imageAlbumDAO.php';
+
 class Image {
 
     private $url = "";
@@ -7,6 +9,7 @@ class Image {
     private $category = "";
     private $comment = "";
     private $notes = 0;
+    private $albIds = [];
 
     /**
      * @param string $u Url de l'image
@@ -55,6 +58,15 @@ class Image {
         return $this->notes;
     }
 
+    /**
+     * @return array|false id des albums de l'image
+     */
+    public function getAlbIds() {
+        $imageAlbumDao = new ImageAlbumDAO();
+        $this->albIds = $imageAlbumDao->albumsfromImage($this->id);
+        return $this->albIds;
+    }
+    
     function setCategory($category) {
         $this->category = $category;
     }

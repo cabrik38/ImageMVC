@@ -5,6 +5,7 @@
     </div>
 
     <div class="panel-body row">
+        <div class="col-md-12">
         <h3><?= $data["alb"]->getName(); ?></h3>
         <?php 
         if(isset($data["imgs"]) && !empty($data["imgs"])) {
@@ -20,7 +21,8 @@
         else {
             echo("<p>Aucune image dans l'album ".$data["alb"]->getName()."</p>");
         } ?>
-        <p>Description : <?= $data["alb"]->getDescription(); ?></p>
+        </div>
+        <p class="col-md-12">Description : <?= $data["alb"]->getDescription(); ?></p>
     </div>
     <script type="text/javascript">
         $(function () {

@@ -14,26 +14,46 @@ class ImageAlbumDAO {
     }
 
     /**
-     * @return int nombre d'image dans un album
+     * @return array tableau contenant les id de tous les albums d'une image
      */
-    public function size(int $albId): int {
-        # Verifie que cet identifiant est correct
-        $albDAO = new AlbumDAO();
-        if (!($albId >= 1 and $albId <= $albDAO->size())) {
-            debug_print_backtrace();
-            die("<H1>Erreur dans ImageAlbumDAO.size: albId=$albId incorrect</H1>");
-        }
-
-        $s = $this->db->prepare('SELECT count(id) FROM imagealbum WHERE albId=:albId');
-        $s->execute(array("albId" => $albId));
+    public function albumsfromImage(int $imgId) {
+        $s = $this->db->prepare('SELECT albId FROM imagealbum WHERE imgId=:imgId');
+        $s->execute(array("imgId" => $imgId));
 
         if ($s) {
-            return $s;
+            $albIds = $s->fetchall(PDO::FETCH_COLUMN);
         } else {
-            print "Error in ImageAlbumDAO.size: id=" . $albId . "<br/>";
+            print "Error in albumsfromImage. imgId=" . $imgId . "<br/>";
             $err = $this->db->errorInfo();
             print $err[2] . "<br/>";
         }
+        if($albIds != false)
+        {
+            return $albIds;
+        }
+        return false;     
+    }
+    
+    /**
+     * @return array tableau contenant les id de tous les albums d'une image
+     */
+    public function imagesFromAlbum(int $albId) {
+        $s = $this->db->prepare('SELECT imgId FROM imagealbum WHERE albId=:albId');
+        $s->execute(array("albId" => $albId));
+
+        if ($s) {
+            $imgIds = $s->fetchAll(PDO::FETCH_COLUMN);
+        } else {
+            print "Error in imagesFromAlbum. albId=" . $albId . "<br/>";
+            $err = $this->db->errorInfo();
+            print $err[2] . "<br/>";
+        }
+        if($imgIds != false)
+        {
+            
+            return $imgIds;
+        }
+        return false;     
     }
 
 }

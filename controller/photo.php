@@ -2,6 +2,7 @@
 
 require_once("model/image.php");
 require_once("model/imageDAO.php");
+require_once("model/albumDAO.php");
 
 class Photo {
 
@@ -30,11 +31,22 @@ class Photo {
         }
         $data["imgSize"] = $imgSize;
 
-		$data["imgUrl"] = $img->getURL();
-		$data["imgId"] = $img->getId();
-		$data["imgComment"] = $img->getComment();
-		$data["imgCategory"] = $img->getCategory();
-		$data["imgNotes"]=$img->getNotes();
+        $data["imgUrl"] = $img->getURL();
+        $data["imgId"] = $img->getId();
+        $data["imgComment"] = $img->getComment();
+        $data["imgCategory"] = $img->getCategory();
+        $data["imgNotes"] = $img->getNotes();
+        
+        $albIds = $img->getAlbIds();
+        $albDAO = new AlbumDAO();
+        $data["imgAlbs"] = [];
+        if($albIds != false) {
+            foreach ($albIds as $albId) {
+                array_push($data["imgAlbs"], $albDAO->getAlbum($albId));
+            }
+        }
+        $allAlbums = $albDAO->getAllAlbums();
+        $data["albumsAvailable"] = $diff = array_udiff($allAlbums, $data["imgAlbs"], 'AlbumDAO::compareAlbums');        
 
         // catégorie
         $category = $this->getCategoryQuery();

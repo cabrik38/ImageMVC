@@ -87,22 +87,6 @@ class AlbumDAO {
     }
 
     /**
-     * @return int nombre d'album
-     */
-    public function countAlbums(): int {
-        $s = $this->db->query('SELECT count(id) FROM album');
-        $result = $s->fetch();
-        $nbAlbums = intval($result["0"]);
-        if ($s) {
-            return $nbAlbums;
-        } else {
-            print "Error in ImageAlbumDAO.size: id=" . $albId . "<br/>";
-            $err = $this->db->errorInfo();
-            print $err[2] . "<br/>";
-        }
-    }
-    
-    /**
      * Supprime un album
      *
      * @param Album $album
@@ -184,4 +168,7 @@ class AlbumDAO {
         return $images;
     }
 
+    public static function compareAlbums($alb1, $alb2) {
+        return $alb1->getId() - $alb2->getId();
+    }
 }

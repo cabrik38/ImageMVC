@@ -39,10 +39,29 @@
 	</div>
 
 	<div class="panel-body">
-		<p>Category : <?= $data["imgCategory"] ?></p>
-		<a href="index.php?controller=photo&action=zoomAction&zoom=1.25&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"]) ?>">
-			<img src="<?= $data["imgUrl"] ?>" width="<?= $data["imgSize"] ?>">
-		</a>
-		<p>Comment : <?= $data["imgComment"] ?></p>
+            <p>Category : <?= $data["imgCategory"] ?></p>
+            <a href="index.php?controller=photo&action=zoomAction&zoom=1.25&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"]) ?>">
+                    <img src="<?= $data["imgUrl"] ?>" width="<?= $data["imgSize"] ?>">
+            </a>
+            <p>Comment : <?= $data["imgComment"] ?></p>
+            <?php if(!empty($data["imgAlbs"])) { ?>
+                <p>Albums : 
+                <?php $lastKey = count($data["imgAlbs"])-1;
+                foreach ($data["imgAlbs"] as $key => $alb) { ?>
+                    <a href="index.php?controller=albumCtrl&action=viewAlbumAction&albId=<?=$alb->getId();?>"><?=$alb->getName();?></a> 
+                <?php if($key != $lastKey) {echo" - ";}               
+                } ?> 
+                </p>
+                <?php } ?>
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                    Ajouter à l'album : <span class="">Choisir</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="top:unset; left:unset;">
+                    <?php foreach ($data["albumsAvailable"] as $album){
+                            ?>
+                            <li><?= $album->getName() ?></li>
+                    <?php } ?>
+                </ul>
 	</div>
 </div>
