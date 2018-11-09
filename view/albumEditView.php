@@ -1,15 +1,15 @@
 <div class="panel panel-default">
 
 	<div class="panel-body">
-		<form id="editForm" method="POST" enctype="multipart/form-data">
-			<div>
+		<form id="editForm" class="col-md-6" method="POST" enctype="multipart/form-data">
+			<div class="form-group">
 				<label for="name">Nom : </label>
-				<input type="text" id="name" name="name" value="<?=  $data["alb"]->getName(); ?>">
-                                <?php if(isset($_GET["error"])) { echo "Veuillez entrer un nom";} ?>
+				<input type="text" id="name" class="form-control" name="name" value="<?=  $data["alb"]->getName(); ?>">      
 			</div>
-                        <div>
+                        <?php if(isset($_GET["error"])) { echo '<div class="alert alert-warning">Veuillez entrer un nom</div>';} ?>
+                        <div class="form-group">
 				<label for="description">Description : </label>
-				<input type="text" id="description" name="description" value="<?= $data["alb"]->getDescription(); ?>">
+				<input type="text" id="description" class="form-control" name="description" value="<?= $data["alb"]->getDescription(); ?>">
 			</div>
 		</form>
 	</div>

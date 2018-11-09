@@ -7,12 +7,12 @@
     <div class="panel-body row">
         <?php 
         if(isset($data["alb"])) {
-            foreach ($data["alb"] as $aegaega) { ?>
+            foreach ($data["alb"] as $alb) { ?>
             <div class="col-md-4 heightEqual">
-                <a class="thumbnail" href="#">
+                <a class="thumbnail" href="index.php?controller=albumCtrl&action=viewAlbumAction&albId=<?= $alb->getId(); ?>">
                     <img src="view/images/album.png">
                 </a>
-                <p><?= $aegaega->getName(); ?></p>
+                <p><?= $alb->getName(); ?></p>
             </div>
             <?php
             }

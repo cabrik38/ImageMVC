@@ -12,10 +12,10 @@ class AlbumCtrl {
     }
 
     private function getData(array $albums = null, Album $album = null) {
-
         if(!empty($albums) || (empty($albums) && $album == null)) {
             $data["menu"]['Home'] = "index.php";
             $data["menu"]['A propos'] = "index.php?controller=home&action=aproposAction";
+            $data["menu"]['Voir photos'] = "index.php?controller=photo&action=indexAction";
             $data["menu"]['Add album'] = "index.php?controller=albumCtrl&action=editAction";
         }
         if(!empty($albums)) {
@@ -24,7 +24,12 @@ class AlbumCtrl {
             }
         }       
         if($album != null) {
-            $data["alb"][0] = $album;
+            $data["menu"]['Home'] = "index.php";
+            $data["menu"]['A propos'] = "index.php?controller=home&action=aproposAction";
+            $data["menu"]['Voir photos'] = "index.php?controller=photo&action=indexAction";
+            $data["menu"]['Voir albums'] = "index.php?controller=albumCtrl&action=indexAction";
+            $data["menu"]['Edit album'] = "index.php?controller=albumCtrl&action=editAction&albId=".$album->getId();
+            $data["alb"]= $album;
         }
         
         return $data;
@@ -83,6 +88,19 @@ class AlbumCtrl {
             
         require_once("view/mainView.php");
     }
+    
+    public function viewAlbumAction() {
+        if (isset($_GET["albId"]) && is_numeric($_GET["albId"])) {
+            $albId = $_GET["albId"];
+            $data["alb"] = $this->albDAO->getAlbum($albId);
+            if($data["alb"] != false) {
+                $data = $this->getData(null, $data["alb"]);
+                $data["imgs"] = $this->albDAO->getImagesList($data["alb"]);
+            }
+            $data["view"] = "photoAlbumView.php";
+            require_once("view/mainView.php");
+        }
+    }
 
     /**
      * Permet d'éditer ou de créer un nouvel album
@@ -92,8 +110,7 @@ class AlbumCtrl {
             $albId = $_GET["albId"];
             $album = $this->albDAO->getAlbum($albId);
 
-            $data = $this->getData($album);
-
+            $data = $this->getData(null, $album);
             $data["menu"] = [];
             $data["menu"]['Save'] = "index.php?controller=albumCtrl&action=saveAction&albId=$albId";
             $data["menu"]['Cancel'] = "index.php?controller=albumCtrl&action=cancelAction&albId=$albId";
@@ -144,8 +161,8 @@ class AlbumCtrl {
         if (isset($_GET["albId"]) && is_numeric($_GET["albId"])) {
             $albId = $_GET["albId"];
             $album = $this->albDAO->getAlbum($albId);
-            $data = $this->getData($album);
-            $data["view"] = "photoMatrixView.php";
+            $data = $this->getData(null, $album);
+            $data["view"] = "photoAlbumView.php";
         }
         else {
             // Pas d'image, se positionne sur la première

@@ -51,6 +51,8 @@ class PhotoMatrix {
 
         $data["menu"]['Home'] = "index.php";
         $data["menu"]['A propos'] = "index.php?controller=home&action=aproposAction";
+        $data["menu"]['Voir photos'] = "index.php?controller=photo&action=indexAction";
+        $data["menu"]['Voir albums'] = "index.php?controller=albumCtrl&action=indexAction";
         $data["menu"]['First'] = "index.php?controller=photoMatrix&action=firstAction&nbImg=$nbImg&category=$urlCategory";
         $data["menu"]['Random'] = "index.php?controller=photoMatrix&action=randomAction&nbImg=$nbImg&category=$urlCategory";
         $data["menu"]['More'] = "index.php?controller=photoMatrix&imgId=$imgId&nbImg=$nbImgBis&category=$urlCategory";

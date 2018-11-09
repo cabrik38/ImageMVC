@@ -34,8 +34,11 @@ class AlbumDAO {
             $err = $this->db->errorInfo();
             print $err[2] . "<br/>";
         }
-
-        return new Album($alb["name"], $img["description"], $albId);
+        if($alb != false)
+        {
+            return new Album($alb["name"], $alb["description"], $albId);
+        }
+        return false;
     }
     
     /**
@@ -72,7 +75,7 @@ class AlbumDAO {
         if ($album->getId() != null) {
             // if image exist : update
             $s = $this->db->prepare('UPDATE album SET name = :name, description = :description WHERE id = :id');
-            $s->execute(array("name" => $album->getName(), "description" => $album->getDescription(), "id" => $albId));
+            $s->execute(array("name" => $album->getName(), "description" => $album->getDescription(), "id" => $album->getId()));
         } else {
             // else : insert
             $s = $this->db->prepare('INSERT INTO album (name, description) VALUES (:name, :description)');
@@ -170,11 +173,15 @@ class AlbumDAO {
      * @return array
      */
     public function getImagesList(Album $album): array {
+        $images = [];
+        $imgDAO = new ImageDAO();
         $s = $this->db->prepare('SELECT image.* FROM image INNER JOIN imagealbum on image.id = imgId WHERE albId = :albId ORDER BY notes');
         $s->execute(array("albId" => $album->getId()));
-        $res = $s->fetchAll();
-
-        return $res;
+        $results = $s->fetchAll();
+            foreach($results as $key => $value) {
+                $images[$key] = $imgDAO->getImage($value['id']);
+            }
+        return $images;
     }
 
 }

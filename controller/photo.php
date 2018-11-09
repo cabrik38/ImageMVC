@@ -52,6 +52,7 @@ class Photo {
 
         $data["menu"]['Home'] = "index.php";
         $data["menu"]['A propos'] = "index.php?controller=home&action=aproposAction";
+        $data["menu"]['Voir albums'] = "index.php?controller=albumCtrl&action=indexAction";
         $data["menu"]['First'] = "index.php?controller=photo&action=firstAction&size=$imgSize&category=$urlCategory";
         $data["menu"]['Random'] = "index.php?controller=photo&action=randomAction&size=$imgSize&category=$urlCategory";
         $data["menu"]['More'] = "index.php?controller=photoMatrix&imgId=$imgId&nbImg=2&category=$urlCategory";
