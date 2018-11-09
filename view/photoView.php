@@ -3,8 +3,22 @@
 	<div class="panel-heading">
 		<a class="btn btn-default" href="index.php?controller=photo&action=prevAction&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"]) ?>"><i class="fa fa-arrow-left" aria-hidden="true"></i> Prev</a>
 		<a class="btn btn-default" href="index.php?controller=photo&action=nextAction&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"]) ?>">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-		<a class="btn btn-default center like" id="<?php echo $data["imgId"]; ?>" href="index.php?controller=photo&action=likeAction&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"])?>&like=like"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-		<a class="btn btn-default center like" id="<?php echo $data["imgId"]; ?>" href="index.php?controller=photo&action=likeAction&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"])?>&like=dislike"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
+		<?php
+			if(isset($_COOKIE[$data["imgId"]]) || isset($_GET["like"])){
+				?>
+				<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+				<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+				<?php
+			}else{?>
+				<a class="btn btn-default center like activation" id="<?php echo $data["imgId"]; ?>"href="index.php?controller=photo&action=likeAction&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"])?>&like=like"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+				<a class="btn btn-default center like activation" id="<?php echo $data["imgId"]; ?>" href="index.php?controller=photo&action=likeAction&imgId=<?= $data["imgId"] ?>&size=<?= $data["imgSize"] ?>&category=<?= urlencode($data["selectedCategory"])?>&like=dislike"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
+				<?php }
+			if($data["imgNotes"] > 0){
+				$color = "green";
+			}else if($data["imgNotes"] < 0){
+				$color = "red";
+			}?>
+		<span style="color :<?= $color ?>"> <?php echo $data["imgNotes"]?></span>
 		<span id="categories" class="dropdown pull-right">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				Categorie : <span class=""><?= $data["selectedCategory"] ?: "Toutes" ?></span>

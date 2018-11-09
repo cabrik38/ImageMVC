@@ -1,3 +1,8 @@
+<?php
+if(isset($_GET['like'])){
+	setcookie($data['imgId'], "like", time()+3600*24*365);
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
