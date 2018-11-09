@@ -17,7 +17,8 @@
 				$color = "green";
 			}else if($data["imgNotes"] < 0){
 				$color = "red";
-			}?>
+			}
+                        else { $color = "black"; } ?>
 		<span style="color :<?= $color ?>"> <?php echo $data["imgNotes"]?></span>
 		<span id="categories" class="dropdown pull-right">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">

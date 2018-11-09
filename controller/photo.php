@@ -100,7 +100,6 @@ class Photo {
     public function firstAction() {
         $img = $this->imgDAO->getFirstImage($this->getCategoryQuery());
         $data = $this->getData($img);
-
         $data["view"] = "photoView.php";
 
         require_once("view/mainView.php");
