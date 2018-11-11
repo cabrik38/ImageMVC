@@ -109,17 +109,24 @@ class AlbumCtrl {
         if (isset($_GET["albId"]) && is_numeric($_GET["albId"])) {
             $albId = $_GET["albId"];
             $album = $this->albDAO->getAlbum($albId);
-
+            
             $data = $this->getData(null, $album);
             $data["menu"] = [];
             $data["menu"]['Save'] = "index.php?controller=albumCtrl&action=saveAction&albId=$albId";
             $data["menu"]['Cancel'] = "index.php?controller=albumCtrl&action=cancelAction&albId=$albId";
         } else {
-            // Pas d'image, tout a vide (création d'image)
+            // Pas d'album, tout a vide (création d'album)
             $data["alb"] = new Album("", "");
-
-            $data["menu"]['Save'] = "index.php?controller=albumCtrl&action=saveAction";
-            $data["menu"]['Cancel'] = "index.php?controller=albumCtrl&action=cancelAction";
+            $cancelImgId = "";
+            $saveImgId = "";
+            if(isset($_GET["imgId"]) && is_numeric($_GET["imgId"])) {
+                $imgId = $_GET["imgId"]-1;
+                $cancelImgId = "&imgId=" . $imgId;
+                $imgId = $_GET["imgId"];
+                $saveImgId = "&imgId=" . $imgId;
+            }         
+            $data["menu"]['Save'] = "index.php?controller=albumCtrl&action=saveAction$saveImgId";
+            $data["menu"]['Cancel'] = "index.php?controller=albumCtrl&action=cancelAction$cancelImgId";
         }
 
         $data["view"] = "albumEditView.php";
@@ -151,6 +158,13 @@ class AlbumCtrl {
         }
             
         $this->albDAO->saveAlbum($album);
+        if(isset($_GET["imgId"]) && is_numeric($_GET["imgId"])) {
+            $album = $this->albDAO->getLastAlbum();
+            $imageAlbumDAO = new ImageAlbumDAO();
+            $imageAlbumDAO->addImageToAlbum($_GET["imgId"], $album->getId());
+            $imgId = $_GET["imgId"]-1;
+            return header("Location: ?controller=photo&action=nextAction&imgId=$imgId");
+        }
         $this->showAlbumsAction();
     }
     
@@ -163,6 +177,9 @@ class AlbumCtrl {
             $album = $this->albDAO->getAlbum($albId);
             $data = $this->getData(null, $album);
             $data["view"] = "photoAlbumView.php";
+        }
+        else if(isset($_GET["imgId"]) && is_numeric($_GET["imgId"])) {
+            return header("Location: ?controller=photo&action=nextAction&imgId=".$_GET["imgId"]);
         }
         else {
             // Pas d'image, se positionne sur la première

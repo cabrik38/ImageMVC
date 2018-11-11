@@ -366,4 +366,24 @@ class Photo {
             require_once("view/mainView.php");
         }
     }
+    
+    /**
+     * Sauvegarder les modifications ou crée une nouvelle image
+     */
+    public function addToAlbumAction() {
+        if (isset($_GET["albId"]) && is_numeric($_GET["albId"])) {
+            $albumDAO = new AlbumDAO();
+            $albId = $_GET["albId"];
+            $album = $albumDAO->getAlbum($albId);
+        }
+        if (isset($_GET["imgId"]) && is_numeric($_GET["imgId"])) {
+            $imgId = $_GET["imgId"];
+            $image = $this->imgDAO->getImage($imgId);
+        }
+        $imageAlbumDAO = new ImageAlbumDAO();
+        $imageAlbumDAO->addImageToAlbum($imgId, $albId);
+        $data = $this->getData($image);
+        $data["view"] = "photoView.php";
+        require_once("view/mainView.php");
+    }
 }

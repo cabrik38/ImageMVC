@@ -57,10 +57,13 @@
                     Ajouter à l'album : <span class="">Choisir</span>
                     <span class="caret"></span>
                 </button>
+                <a href="index.php?controller=albumCtrl&action=editAction&imgId=<?= $data["imgId"] ?>"><button class="btn btn-default" style="margin-left: 50px;" type="button">
+                    Créer un album
+                    </button></a>
                 <ul class="dropdown-menu" style="top:unset; left:unset;">
                     <?php foreach ($data["albumsAvailable"] as $album){
                             ?>
-                            <li><?= $album->getName() ?></li>
+                    <li><a href="index.php?controller=photo&action=addToAlbumAction&albId=<?= $album->getId() ?>&imgId=<?= $data["imgId"] ?>"><?= $album->getName() ?></a></li>
                     <?php } ?>
                 </ul>
 	</div>

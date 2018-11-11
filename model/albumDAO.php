@@ -42,6 +42,30 @@ class AlbumDAO {
     }
     
     /**
+     * Retourne un objet album correspondant à l'identifiant
+     *
+     * @param int $albId
+     *
+     * @return Album
+     */
+    public function getLastAlbum(): Album {
+        $s = $this->db->query('SELECT * FROM album ORDER BY id DESC LIMIT 1');
+
+        if ($s) {
+            $alb = $s->fetch();
+        } else {
+            print "Error in getLastAlbum<br/>";
+            $err = $this->db->errorInfo();
+            print $err[2] . "<br/>";
+        }
+        if($alb != false)
+        {
+            return new Album($alb["name"], $alb["description"], $alb["id"]);
+        }
+        return false;
+    }
+    
+    /**
      * Retourne un tableau conteannt tous les albums
      *
      * @param int $albId

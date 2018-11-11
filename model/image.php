@@ -63,7 +63,7 @@ class Image {
      */
     public function getAlbIds() {
         $imageAlbumDao = new ImageAlbumDAO();
-        $this->albIds = $imageAlbumDao->albumsfromImage($this->id);
+        $this->albIds = $imageAlbumDao->getAlbumsfromImage($this->id);
         return $this->albIds;
     }
     
