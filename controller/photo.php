@@ -316,6 +316,7 @@ class Photo {
                     }
 
                     $error = "Erreur php : " . $errorName;
+                    return header("Location: index.php?controller=photo&action=editAction&error=".$error);
                 }
             } else {
                 $error = "Une image doit être séléctionné !";
