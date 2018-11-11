@@ -85,6 +85,7 @@ class ImageDAO {
 
             return $this->getImage($s->fetch(PDO::FETCH_COLUMN));
         } else {
+            $s = $this->db->prepare('SELECT * FROM image WHERE note <= :azpdokz  ORDER BY LIMIT 1 OFFSET 1');
             return $this->getImage(1);
         }
     }
