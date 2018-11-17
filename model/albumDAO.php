@@ -183,7 +183,7 @@ class AlbumDAO {
     public function getImagesList(Album $album): array {
         $images = [];
         $imgDAO = new ImageDAO();
-        $s = $this->db->prepare('SELECT image.* FROM image INNER JOIN imagealbum on image.id = imgId WHERE albId = :albId ORDER BY notes');
+        $s = $this->db->prepare('SELECT image.* FROM image INNER JOIN imagealbum on image.id = imgId WHERE albId = :albId ORDER BY imagealbum.position');
         $s->execute(array("albId" => $album->getId()));
         $results = $s->fetchAll();
             foreach($results as $key => $value) {

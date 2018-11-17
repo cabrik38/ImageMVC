@@ -56,6 +56,27 @@ class ImageAlbumDAO {
     }
     
     /**
+     * @return array tableau contenant les id de tous les albums d'une image
+     */
+    public function getImagesPositions(int $albId) {
+        $s = $this->db->prepare('SELECT imgId, position FROM imagealbum WHERE albId = :albId');
+        $s->execute(array("albId" => $albId));
+
+        if ($s) {
+            $positions = $s->fetchAll();
+        } else {
+            print "Error in imagesFromAlbum. albId=" . $albId . "<br/>";
+            $err = $this->db->errorInfo();
+            print $err[2] . "<br/>";
+        }
+        if($positions != false)
+        {       
+            return $positions;
+        }
+        return false;     
+    }
+    
+    /**
      * Ajoute une image à un album
      *
      * @param Image $img
@@ -63,8 +84,8 @@ class ImageAlbumDAO {
      */
     public function addImageToAlbum(int $imgId, int $albId) {
         
-        $s = $this->db->prepare('SELECT count(id) FROM imagealbum WHERE albId = :albId AND imgId = :imgId');
-        $s->execute(array("albId" => $albId, "imgId" => $imgId));
+        $s = $this->db->prepare('SELECT count(id) FROM imagealbum WHERE albId = :albId');
+        $s->execute(array("albId" => $albId));
 
         if ($s) {
             $position = $s->fetch(PDO::FETCH_COLUMN)[0] + 1;
@@ -80,6 +101,14 @@ class ImageAlbumDAO {
                 "imgId" => $imgId,
                 "position" => $position));
         }
+    }
+    
+    public function updateImagePosition(int $albId, int $imgId, int $position) {
+        $s = $this->db->prepare('UPDATE imagealbum SET position = :position WHERE imgId = :imgId and albId = :albId');
+        var_dump($s);
+        $s->execute(array("position" => $position,
+            "albId" => $albId,
+            "imgId" => $imgId));
     }
 
     /**
