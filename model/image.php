@@ -9,6 +9,7 @@ class Image {
     private $category = "";
     private $comment = "";
     private $notes = 0;
+    private $position;
     private $albIds = [];
 
     /**
@@ -63,7 +64,7 @@ class Image {
      */
     public function getAlbIds() {
         $imageAlbumDao = new ImageAlbumDAO();
-        $this->albIds = $imageAlbumDao->getAlbumsfromImage($this->id);
+        $this->albIds = $imageAlbumDao->getAlbumsFromImage($this->id);
         return $this->albIds;
     }
     
@@ -76,6 +77,10 @@ class Image {
     }
 
     function setNotes($notes) {
+        $this->notes = $notes;
+    }
+    
+    function setPosition($position) {
         $this->notes = $notes;
     }
 

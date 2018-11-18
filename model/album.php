@@ -8,9 +8,9 @@ class Album {
     private $imgIds = [];
 
     /**
-     * @param int $id Id de l'album
      * @param string $name Nom de l'album
      * @param string $desc Description de l'album
+     * @param int $id Id de l'album
      */
     public function __construct(string $name, string $desc, int $id = null) {
         $this->id = $id;
@@ -48,14 +48,23 @@ class Album {
         return $this->imgIds;
     }
     
+    /**
+     * @param int $id Id de l'album
+     */
     function setId($id) {
         $this->id = $id;
     }
 
+    /**
+     * @param string $name Le nom de l'album
+     */
     function setName($name) {
         $this->name = $name;
     }
 
+    /**
+     * @param string $description La description de l'album
+     */
     function setDescription($description) {
         $this->description = $description;
     }
