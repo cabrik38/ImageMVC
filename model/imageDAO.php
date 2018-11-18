@@ -31,11 +31,11 @@ class ImageDAO {
      *
      * @return Image
      */
-    public function getImage(int $imgId): Image {
+    public function getImage(int $imgId) {
         # Verifie que cet identifiant est correct
 
         if (!($imgId >= 1 and $imgId <= $this->size())) {
-            die("<H1>Erreur dans ImageDAO.getImage: imgId=$imgId incorrect</H1>");
+            return false;
         }
 
         $s = $this->db->prepare('SELECT * FROM image WHERE id=:id');

@@ -1,11 +1,18 @@
-    <div class="panel panel-default">
-
+<?php $errorMessage = "";
+if(isset($data["error"]) && $data["error"] == "nameRequired") { 
+    $errorMessage = '<div style="margin-top:10px;" class="col-md-12 alert alert-warning">Veuillez entrer un nom</div>';
+} 
+if(isset($data["error"]) && $data["error"] == "wrongImgId") { 
+    $errorMessage = '<div style="margin-top:10px;" class="col-md-12 alert alert-warning">L\'image à ajouter n\'existe pas</div>';
+} 
+?>    
+<div class="panel panel-default">
 	<div class="panel-body">
 		<form id="editForm" class="col-md-12" method="POST" enctype="multipart/form-data">
 			<div class="form-group col-md-6">
 				<label for="name">Nom : </label>
 				<input type="text" id="name" class="form-control" name="name" value="<?=  $data["alb"]->getName(); ?>">  
-                                <?php if(isset($_GET["error"])) { echo '<div style="margin-top:10px;" class="col-md-12 alert alert-warning">Veuillez entrer un nom</div>';} ?>
+                                <?php if(isset($_GET["error"])) { echo $errorMessage; } ?>
 			</div>
                         <?php 
                         if(isset($data["imgs"]) && !empty($data["imgs"])) {?>
@@ -41,7 +48,7 @@
                         <?php }
                         else {
                             if(isset($_GET["albId"])) {
-                                echo("<p>Aucune image dans l'album</p>");
+                                echo("<p class=\"col-md-12\">Aucune image dans l'album</p>");
                             }
                         } ?>
                         <div class="form-group col-md-6">

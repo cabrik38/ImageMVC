@@ -18,35 +18,22 @@ class AlbumDAO {
 
     /**
      * Retourne un objet album correspondant à l'identifiant
-     *
      * @param int $albId
-     *
-     * @return Album
+     * @return Album|false
      */
-    public function getAlbum(int $albId): Album {
+    public function getAlbum(int $albId) {
         $s = $this->db->prepare('SELECT * FROM album WHERE id=:id');
         $s->execute(array("id" => $albId));
-
-        if ($s) {
-            $alb = $s->fetch();
-        } else {
-            print "Error in getAlbum. id=" . $albId . "<br/>";
-            $err = $this->db->errorInfo();
-            print $err[2] . "<br/>";
+        $alb = $s->fetch();    
+        if($alb == false) {
+            return false;
         }
-        if($alb != false)
-        {
-            return new Album($alb["name"], $alb["description"], $albId);
-        }
-        return false;
+        return new Album($alb["name"], $alb["description"], $albId);
     }
     
     /**
-     * Retourne un objet album correspondant à l'identifiant
-     *
-     * @param int $albId
-     *
-     * @return Album
+     * Retourne le dernier album inséré dans la base de donnée
+     * @return Album|false
      */
     public function getLastAlbum(): Album {
         $s = $this->db->query('SELECT * FROM album ORDER BY id DESC LIMIT 1');
@@ -67,9 +54,6 @@ class AlbumDAO {
     
     /**
      * Retourne un tableau conteannt tous les albums
-     *
-     * @param int $albId
-     *
      * @return array
      */
     public function getAllAlbums(): array {
@@ -91,9 +75,8 @@ class AlbumDAO {
 
     /**
      * Sauvegarde ou met à jour un album
-     *
      * @param Album $album
-     *
+     * @param Image $img
      */
     public function saveAlbum(Album $album, Image $img = null) {
         if ($album->getId() != null) {
@@ -112,9 +95,7 @@ class AlbumDAO {
 
     /**
      * Supprime un album
-     *
      * @param Album $album
-     *
      */
     public function delAlbum(Album $album) {
         $albId = $album->getId();
@@ -127,9 +108,8 @@ class AlbumDAO {
 
     /**
      * Ajoute une image à un album
-     *
      * @param Image $img
-     *
+     * @param Album $album
      */
     public function addImage(Image $img, Album $album) {
         $imgId = $img->getId();
@@ -146,10 +126,8 @@ class AlbumDAO {
 
     /**
      * Supprime une image d'un album
-     *
      * @param Image $img
      * @param Album $album
-     *
      */
     public function delImage(Image $img, Album $album) {
         $imgId = $img->getId();
@@ -163,9 +141,7 @@ class AlbumDAO {
 
     /**
      * Supprime toute les images d'un album
-     *
      * @param Album $album
-     *
      */
     public function delAllImages(Album $album) {
         // if image exist : update
@@ -175,9 +151,7 @@ class AlbumDAO {
 
     /**
      * Retourne la liste des images d'un album
-     *
      * @param Album $album
-     * 
      * @return array
      */
     public function getImagesList(Album $album): array {
@@ -192,6 +166,12 @@ class AlbumDAO {
         return $images;
     }
 
+    /**
+     * Compare 2 albums afin de construire la liste des albums auques une image peut être ajoutée
+     * @param Album $alb1
+     * @param Album $alb2
+     * @return boolean
+     */
     public static function compareAlbums($alb1, $alb2) {
         return $alb1->getId() - $alb2->getId();
     }
