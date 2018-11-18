@@ -31,11 +31,11 @@ class ImageDAO {
      *
      * @return Image
      */
-    public function getImage(int $imgId) {
+    public function getImage(int $imgId): Image {
         # Verifie que cet identifiant est correct
 
         if (!($imgId >= 1 and $imgId <= $this->size())) {
-            return false;
+            die("<H1>Erreur dans ImageDAO.getImage: imgId=$imgId incorrect</H1>");
         }
 
         $s = $this->db->prepare('SELECT * FROM image WHERE id=:id');
@@ -80,18 +80,18 @@ class ImageDAO {
      */
     public function getFirstImage(string $category = null): Image {
       if ($category != null) {
-        $s = $this->db->prepare('SELECT id FROM image WHERE category = :category ORDER BY notes DESC LIMIT 1');
+        $s = $this->db->prepare('SELECT id FROM image WHERE category = :category ORDER BY notes DESC, id ASC LIMIT 1');
         $s->execute(array("category" => $category));
-        $id =$s->fetch(PDO::FETCH_COLUMN);
+        $id = $s->fetch(PDO::FETCH_COLUMN);
         if($id != null){
           return $this->getImage($id);
         } else{
           $s = $this->db->prepare('SELECT id FROM image WHERE category = :category LIMIT 1');
           $s->execute(array("category" => $category));
           return $this->getImage($s->fetch(PDO::FETCH_COLUMN));
-          }
+        }
       }else {
-        $s = $this->db->prepare('SELECT id FROM image ORDER BY notes DESC LIMIT 1');
+        $s = $this->db->prepare('SELECT id FROM image ORDER BY notes DESC, id DESC LIMIT 1');
         $s->execute();
         $id = $s->fetch(PDO::FETCH_COLUMN);
         if($id != null){
@@ -114,16 +114,13 @@ class ImageDAO {
         $id = $img->getId();
         $notes = $img->getNotes();
         if ($category != null) {
-            $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND (id > :id  AND notes = :notes) OR notes < :notes ORDER BY notes DESC, id DESC LIMIT 1');
+            $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND ((id > :id  AND notes = :notes) OR notes < :notes) ORDER BY notes DESC, id ASC LIMIT 1');
             $s->execute(array("id" => $id, "category" => $category, "notes" => $notes));
             $resultId = $s->fetch(PDO::FETCH_COLUMN);
-            if($resultId == null){
-              $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND id > :id LIMIT 1');
-              $s->execute(array("id" => $id, "category" => $category));
-
-              $resultId = $s->fetch(PDO::FETCH_COLUMN);
-            }
-            $id = $resultId;
+            if($resultId == false){
+              echo ("Il n'y a plus d'image apres celle la dans cette catégorie");
+          }
+          else{$id = $resultId;}
         } else {
             $s = $this->db->prepare('SELECT id FROM image WHERE (id > :id AND notes = :notes) OR notes < :notes ORDER BY notes DESC, id ASC LIMIT 1');
             $s->execute(array("id" => $id,"notes" => $notes));
@@ -133,8 +130,7 @@ class ImageDAO {
                   $id += 1;
               }
             }else{
-
-              $id= $resultId;
+              $id = $resultId;
             }
         }
 
@@ -151,34 +147,26 @@ class ImageDAO {
      */
     public function getPrevImage(Image $img, string $category = null): Image {
         $id = $img->getId();
-        $notes = $img->getId();
+        $notes = $img->getNotes();
         if ($category != null) {
-          $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND (id < :id  AND notes = :notes) OR notes > :notes ORDER BY notes DESC, id DESC LIMIT 1');
+          $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND ((id < :id  AND notes = :notes) OR notes > :notes) ORDER BY notes ASC, id DESC LIMIT 1');
           $s->execute(array("id" => $id, "category" => $category, "notes" => $notes));
           $resultId = $s->fetch(PDO::FETCH_COLUMN);
-          if($resultId == null){
-            $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND id < :id ORDER BY id DESC LIMIT 1');
-            $s->execute(array("id" => $id, "category" => $category));
-            $resultId = $s->fetch(PDO::FETCH_COLUMN);
-            if ($resultId != null) {
-                $id = $resultId;
-            }
-          }
-          $id = $resultId;
+          if($resultId == null){ echo "il n'y a pas d'image avant celle la dans cette catégorie";}
+          else{ $id = $resultId; }
+
         } else {
-          $s = $this->db->prepare('SELECT id FROM image WHERE (id < :id AND notes = :notes) OR notes > :notes ORDER BY notes DESC, id ASC LIMIT 1');
+          $s = $this->db->prepare('SELECT id FROM image WHERE (id < :id AND notes = :notes) OR notes > :notes ORDER BY notes ASC, id DESC LIMIT 1');
           $s->execute(array("id" => $id,"notes" => $notes));
           $resultId = $s->fetch(PDO::FETCH_COLUMN);
           if($resultId == null){
-            if ($id > 1) {
-                $id -= 1;
-            }
+            echo " vous êtes sur la première image";
           }else{
-            $id = $resultId;
+              $id = $resultId;
           }
       }
 
-      return $this->getImage($id);
+    return $this->getImage($id);
   }
 
     /**
