@@ -314,9 +314,7 @@ class Photo {
                             $errorName = "Fichier transféré partiellement.";
                             break;
                     }
-
-                    $error = "Erreur php : " . $errorName;
-                    return header("Location: index.php?controller=photo&action=editAction&error=".$error);
+                    return header("Location: index.php?controller=photo&action=editAction&error=".$errorName);
                 }
             } else {
                 $error = "Une image doit être séléctionné !";

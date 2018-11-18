@@ -79,16 +79,28 @@ class ImageDAO {
      * @return Image
      */
     public function getFirstImage(string $category = null): Image {
-        if ($category != null) {
-            $s = $this->db->prepare('SELECT id FROM image WHERE category = :category LIMIT 1');
-            $s->execute(array("category" => $category));
-
-            return $this->getImage($s->fetch(PDO::FETCH_COLUMN));
-        } else {
-            $s = $this->db->prepare('SELECT * FROM image WHERE note <= :azpdokz  ORDER BY LIMIT 1 OFFSET 1');
-            return $this->getImage(1);
-        }
+      if ($category != null) {
+        $s = $this->db->prepare('SELECT id FROM image WHERE category = :category ORDER BY notes DESC LIMIT 1');
+        $s->execute(array("category" => $category));
+        $id =$s->fetch(PDO::FETCH_COLUMN);
+        if($id != null){
+          return $this->getImage($id);
+        } else{
+          $s = $this->db->prepare('SELECT id FROM image WHERE category = :category LIMIT 1');
+          $s->execute(array("category" => $category));
+          return $this->getImage($s->fetch(PDO::FETCH_COLUMN));
+          }
+      }else {
+        $s = $this->db->prepare('SELECT id FROM image ORDER BY notes DESC LIMIT 1');
+        $s->execute();
+        $id = $s->fetch(PDO::FETCH_COLUMN);
+        if($id != null){
+          return $this->getImage($id);
+        } else{
+          return $this->getImage(1);
+      }
     }
+  }
 
     /**
      * Retourne l'image suivante d'une image
@@ -100,17 +112,29 @@ class ImageDAO {
      */
     public function getNextImage(Image $img, string $category = null): Image {
         $id = $img->getId();
+        $notes = $img->getNotes();
         if ($category != null) {
-            $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND id > :id LIMIT 1');
-            $s->execute(array("id" => $id, "category" => $category));
-
+            $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND (id > :id  AND notes = :notes) OR notes < :notes ORDER BY notes DESC, id DESC LIMIT 1');
+            $s->execute(array("id" => $id, "category" => $category, "notes" => $notes));
             $resultId = $s->fetch(PDO::FETCH_COLUMN);
-            if ($resultId != null) {
-                $id = $resultId;
+            if($resultId == null){
+              $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND id > :id LIMIT 1');
+              $s->execute(array("id" => $id, "category" => $category));
+
+              $resultId = $s->fetch(PDO::FETCH_COLUMN);
             }
+            $id = $resultId;
         } else {
-            if ($id < $this->size()) {
-                $id += 1;
+            $s = $this->db->prepare('SELECT id FROM image WHERE (id > :id AND notes = :notes) OR notes < :notes ORDER BY notes DESC, id ASC LIMIT 1');
+            $s->execute(array("id" => $id,"notes" => $notes));
+            $resultId = $s->fetch(PDO::FETCH_COLUMN);
+            if($resultId == null){
+              if ($id < $this->size()) {
+                  $id += 1;
+              }
+            }else{
+
+              $id= $resultId;
             }
         }
 
@@ -127,21 +151,35 @@ class ImageDAO {
      */
     public function getPrevImage(Image $img, string $category = null): Image {
         $id = $img->getId();
+        $notes = $img->getId();
         if ($category != null) {
+          $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND (id < :id  AND notes = :notes) OR notes > :notes ORDER BY notes DESC, id DESC LIMIT 1');
+          $s->execute(array("id" => $id, "category" => $category, "notes" => $notes));
+          $resultId = $s->fetch(PDO::FETCH_COLUMN);
+          if($resultId == null){
             $s = $this->db->prepare('SELECT id FROM image WHERE category = :category AND id < :id ORDER BY id DESC LIMIT 1');
             $s->execute(array("id" => $id, "category" => $category));
             $resultId = $s->fetch(PDO::FETCH_COLUMN);
             if ($resultId != null) {
                 $id = $resultId;
             }
+          }
+          $id = $resultId;
         } else {
+          $s = $this->db->prepare('SELECT id FROM image WHERE (id < :id AND notes = :notes) OR notes > :notes ORDER BY notes DESC, id ASC LIMIT 1');
+          $s->execute(array("id" => $id,"notes" => $notes));
+          $resultId = $s->fetch(PDO::FETCH_COLUMN);
+          if($resultId == null){
             if ($id > 1) {
                 $id -= 1;
             }
-        }
+          }else{
+            $id = $resultId;
+          }
+      }
 
-        return $this->getImage($id);
-    }
+      return $this->getImage($id);
+  }
 
     /**
      * Saute en avant ou en arrière de $nb images
